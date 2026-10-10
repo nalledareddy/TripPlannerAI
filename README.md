@@ -1,4 +1,4 @@
-[Uploading README.md…]()
+
 # AI Multi-Agent Trip Planner
 
 A trip planning application that uses multiple AI agents to prepare an itinerary based on the source, destination, budget, and number of days.
