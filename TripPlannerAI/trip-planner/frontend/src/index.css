@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  font-family: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+body {
+  @apply min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.6),_transparent_36%),linear-gradient(180deg,_#f8fdff,_#e0f7fa_52%,_#f7fffb_100%)] text-slate-900 antialiased;
+}
+
+#root {
+  @apply min-h-screen;
+}
+
+.app-shell {
+  background-image:
+    radial-gradient(circle at 16% 18%, rgba(191, 219, 254, 0.55), transparent 20%),
+    radial-gradient(circle at 82% 10%, rgba(187, 247, 208, 0.52), transparent 24%),
+    radial-gradient(circle at 50% 82%, rgba(224, 242, 254, 0.45), transparent 28%);
+}
+
+.card-shell {
+  @apply rounded-[28px] border border-sky-100 bg-white/85 p-5 shadow-glow backdrop-blur-xl;
+}
+
+.soft-panel {
+  @apply rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3;
+}
+
+.section-title {
+  @apply text-lg font-semibold tracking-wide text-slate-900;
+}
+
+.field-label {
+  @apply mb-2 block text-sm font-medium text-slate-700;
+}
+
+.field-input {
+  @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200;
+}
+
+.metric-pill {
+  @apply rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700;
+}
