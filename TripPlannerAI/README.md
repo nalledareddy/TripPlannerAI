@@ -1,100 +1,35 @@
-# ✈️ AI Multi-Agent Trip Planner
 
-### Less time planning. More time exploring.
+A trip planning application that uses multiple AI agents to prepare an itinerary based on the source, destination, budget, and number of days.
 
-Planning a trip is exciting---until you're juggling weather forecasts,
-attractions, routes, hotels, and a budget across a dozen tabs.
+The application has a FastAPI backend and a React frontend. LangGraph coordinates the agents. The system uses external APIs for weather, places, and routes, and supports streaming responses, route maps, PDF export, and preference storage.
 
-**AI Multi-Agent Trip Planner** brings those moving pieces into one
-workflow. Enter a starting point, destination, budget, and trip
-duration, and a coordinated team of AI agents helps turn those details
-into a travel plan.
+## Features
 
-Built with **FastAPI, React, Tailwind CSS, and LangGraph**, the project
-combines external travel data with multi-agent orchestration, streaming
-updates, an interactive map, and PDF itinerary export.
+- LangGraph workflow with an orchestrator and separate agents for weather, places, transport, hotels, budget, itinerary, review, and PDF generation
+- Parallel execution of weather, places, transport, and hotel tasks
+- Streaming endpoint for progressive updates in the frontend
+- OpenWeatherMap, OpenTripMap, and OpenRouteService integrations
+- Leaflet route map and PDF itinerary export
+- Timeout handling and fallback responses when external APIs or the LLM are unavailable
+- Preference storage using ChromaDB or a JSON file
 
-------------------------------------------------------------------------
+## Tech Stack
 
-## 🌍 What can it do?
+Frontend: React, Tailwind CSS, Vite
 
-Rather than asking one assistant to do everything, the planner splits
-the work into focused roles:
+Backend: Python, FastAPI
 
--   **🧭 Orchestrator** --- coordinates the workflow and brings the
-    results together.
--   **🌦️ Weather agent** --- gathers weather information for the trip.
--   **📍 Places agent** --- looks up attractions and points of interest.
--   **🚗 Transport agent** --- gathers route and transportation
-    information.
--   **🏨 Hotel agent** --- handles accommodation-related planning.
--   **💰 Budget agent** --- helps shape the plan around the available
-    budget.
--   **🗓️ Itinerary and review agents** --- organize the information into
-    a coherent plan and review it.
--   **📄 PDF export** --- turns the itinerary into a portable document.
+Agent workflow: LangGraph
 
-Weather, places, transport, and hotel tasks can run in parallel after
-orchestration, allowing independent parts of the research to happen
-together.
+External APIs: OpenWeatherMap, OpenTripMap, OpenRouteService
 
-## ✨ What's happening behind the scenes?
+Maps: Leaflet
 
-### A workflow, not just a prompt
+Memory: ChromaDB with JSON file fallback
 
-[LangGraph](https://www.langchain.com/langgraph) coordinates the
-specialist agents and the flow between them. Each agent has a focused
-responsibility, and the workflow combines their results.
+## Project Structure
 
-### Updates while the plan is being built
-
-A streaming endpoint lets the frontend receive progressive updates
-instead of waiting for the entire workflow to finish.
-
-### Real travel data
-
-The application integrates with: -
-[OpenWeatherMap](https://openweathermap.org/) for weather information -
-[OpenTripMap](https://opentripmap.io/) for places and attractions -
-[OpenRouteService](https://openrouteservice.org/) for routing
-information
-
-### Maps and a plan you can take with you
-
-Leaflet powers the route map, and the application supports PDF itinerary
-export.
-
-### Built to handle imperfect conditions
-
-External APIs can be slow or unavailable, keys can be missing, and an
-LLM may not respond. The app includes timeout protection and fallback
-behavior. When the LLM is unavailable, the orchestrator and itinerary
-agents can use deterministic structured outputs.
-
-### Flexible preference memory
-
-The memory layer supports ChromaDB, with a JSON-file fallback for
-storing preferences when ChromaDB is not enabled.
-
-------------------------------------------------------------------------
-
-## 🧰 Tech stack
-
-  Area                Technologies
-  ------------------- ---------------------------------------------------
-  Frontend            React, Tailwind CSS, Vite
-  Backend             Python, FastAPI
-  Agent workflow      LangGraph
-  Travel data         OpenWeatherMap, OpenTripMap, OpenRouteService
-  Maps and export     Leaflet, PDF export
-  Preference memory   ChromaDB or JSON-file fallback
-  API behavior        Streaming responses, timeouts, graceful fallbacks
-
-------------------------------------------------------------------------
-
-## 🗂️ Project structure
-
-``` text
+```text
 trip-planner/
 ├── backend/
 │   ├── app/
@@ -111,19 +46,13 @@ trip-planner/
 └── README.md
 ```
 
-------------------------------------------------------------------------
+## Setup
 
-## 🚀 Run it locally
+### Backend
 
-You'll need **Python**, **Node.js/npm**, and API keys for the travel
-services you want to use. These commands use PowerShell on Windows;
-adjust the virtual-environment activation command for your shell.
+Open a terminal and move into the backend directory.
 
-### 1. Start the backend
-
-From the project directory:
-
-``` powershell
+```powershell
 cd trip-planner/backend
 python -m venv .venv
 .venv\Scripts\activate
@@ -131,37 +60,33 @@ pip install -r requirements.txt
 Copy-Item .env.example .env
 ```
 
-Add the required travel API keys to `backend/.env`. If you're using the
-LLM-powered path, configure `OPENAI_API_KEY` too. Check `.env.example`
-for the exact variable names expected by this project.
+Add the required API keys to `backend/.env`. Check `.env.example` for the exact environment variable names. Configure `OPENAI_API_KEY` if using the LLM-powered workflow.
 
-**Never commit real API keys or secrets to Git.**
+Start the backend:
 
-Start the API:
-
-``` powershell
+```powershell
 uvicorn app.main:app --reload
 ```
 
-Backend: <http://127.0.0.1:8000>
+The backend runs at `http://127.0.0.1:8000`.
 
-### 2. Start the frontend
+### Frontend
 
-Open a second terminal:
+Open a second terminal and move into the frontend directory.
 
-``` powershell
+```powershell
 cd trip-planner/frontend
 npm install
 npm run dev
 ```
 
-Frontend: <http://127.0.0.1:5173>
+The frontend runs at `http://127.0.0.1:5173`.
 
-### 3. Try a sample trip
+## Example Request
 
-Use this example in the UI or in a direct API request:
+Use this payload in the frontend or when calling the API directly.
 
-``` json
+```json
 {
   "user_id": "test",
   "source": "Bangalore",
@@ -171,65 +96,21 @@ Use this example in the UI or in a direct API request:
 }
 ```
 
-This represents a five-day trip from Bangalore to Goa with a budget of
-30,000. Change the source, destination, budget, and duration to try
-another scenario.
+This requests a five day trip from Bangalore to Goa with a budget of 30000.
 
-------------------------------------------------------------------------
+## API Endpoints
 
-## 🔌 API endpoints
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/health` | Health check |
+| POST | `/generate` | Generate a trip plan |
+| POST | `/generate-stream` | Generate a trip plan with streaming updates |
+| GET | `/generated/{filename}` | Retrieve a generated file |
 
-  -------------------------------------------------------------------------
-  Method                  Endpoint                  Purpose
-  ----------------------- ------------------------- -----------------------
-  `GET`                   `/health`                 Health check
+## Configuration
 
-  `POST`                  `/generate`               Generate a trip plan
+Set `USE_CHROMA=true` in `backend/.env` to store preferences in ChromaDB. Otherwise, preferences are stored in `backend/data/preferences.json`.
 
-  `POST`                  `/generate-stream`        Generate a trip plan
-                                                    with streaming updates
+If API keys are missing or external services are unavailable, the application can use fallback data. If `OPENAI_API_KEY` is missing or the LLM cannot be reached, the orchestrator and itinerary agents can return deterministic structured outputs.
 
-  `GET`                   `/generated/{filename}`   Retrieve a generated
-                                                    file
-  -------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
-## ⚙️ Configuration notes
-
--   **Travel API keys:** Add the keys required by the external services
-    to `backend/.env`.
--   **LLM fallback:** If `OPENAI_API_KEY` is missing or the LLM cannot
-    be reached, the orchestrator and itinerary agents can fall back to
-    deterministic structured outputs.
--   **Preference memory:** Set `USE_CHROMA=true` in `backend/.env` to
-    persist preferences in ChromaDB. Otherwise, preferences are stored
-    in `backend/data/preferences.json`.
--   **External service issues:** Missing keys or unavailable network
-    access should trigger fallback behavior rather than making local
-    development hard-crash.
-
-------------------------------------------------------------------------
-
-## 🧠 Why this project is interesting
-
-The interesting part isn't just generating an itinerary. It's
-coordinating specialized agents, combining information from different
-travel services, handling slow or unavailable dependencies, and
-presenting the result through a usable interface.
-
-This project brings together practical full-stack engineering and AI
-application patterns: **agent orchestration, parallel tasks, streaming
-APIs, external integrations, preference memory, and resilient
-fallbacks**.
-
-## 🛣️ The idea
-
-Travel planning is made up of lots of small decisions. This project
-explores how a team of focused agents can take on those pieces and bring
-them into one plan---so the traveler can spend less time juggling tabs
-and more time looking forward to the trip.
-
-------------------------------------------------------------------------
-
-*Have fun exploring, experimenting, and making the planner your own.*
+Do not commit API keys or other secrets to the repository.
